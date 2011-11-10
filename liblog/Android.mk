@@ -46,6 +46,11 @@ LOCAL_MODULE := liblog
 LOCAL_SRC_FILES := $(liblog_host_sources)
 LOCAL_LDLIBS := -lpthread
 LOCAL_CFLAGS := -DFAKE_LOG_DEVICE=1
+
+ifeq ($(TARGET_BOOTLOADER_BOARD_NAME),jordan)
+LOCAL_CFLAGS += -DNO_QCOM_STUFF
+endif
+
 include $(BUILD_HOST_STATIC_LIBRARY)
 
 ifeq ($(TARGET_SIMULATOR),true)

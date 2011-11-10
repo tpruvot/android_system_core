@@ -152,6 +152,7 @@ int __android_log_write(int prio, const char *tag, const char *msg)
         !strncmp(tag, "Kineto", 6) ||
         !strncmp(tag, "GAN", 3) ||
         !strcmp(tag, "NAS") ||
+#ifndef NO_QCOM_STUFF
         !strncmp(tag, "QCRIL", 5) ||
         !strncmp(tag, "QC-RIL", 6) ||
         !strncmp(tag, "QC-QMI", 6) ||
@@ -159,6 +160,9 @@ int __android_log_write(int prio, const char *tag, const char *msg)
         !strncmp(tag, "QC-DSI", 6) ||
         !strcmp(tag, "QC-NETMGR-LIB") ||
         !strcmp(tag, "QC-QDP")
+#else
+        !strcmp(tag, "SSM")
+#endif
         )
             log_id = LOG_ID_RADIO;
 
@@ -191,11 +195,15 @@ int __android_log_buf_write(int bufID, int prio, const char *tag, const char *ms
         !strcmp(tag, "KINETO") ||
         !strncmp(tag, "KIPC", 4) ||
         !strncmp(tag, "Kineto", 6) ||
+#ifndef NO_QCOM_STUFF
         !strncmp(tag, "QCRIL", 5) ||
         !strncmp(tag, "QC-RIL", 6) ||
         !strncmp(tag, "QC-QMI", 6) ||
         !strncmp(tag, "QC-ONCRPC", 9) ||
         !strncmp(tag, "QC-DSI", 6)
+#else
+        !strcmp(tag, "SSM")
+#endif
         )
             bufID = LOG_ID_RADIO;
 
