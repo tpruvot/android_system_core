@@ -1,6 +1,7 @@
 # Copyright 2011 The Android Open Source Project
 
 ifneq ($(BUILD_TINY_ANDROID),true)
+ifneq ($(TARGET_SIMULATOR),true)
 
 LOCAL_PATH := $(call my-dir)
 include $(CLEAR_VARS)
@@ -56,4 +57,5 @@ include $(BUILD_PHONY_PACKAGE)
 _add-charger-image :=
 _img_modules :=
 
+endif # !TARGET_SIMULATOR
 endif
