@@ -12,7 +12,7 @@ ifeq ($(BOARD_USES_BOOTMENU),true)
 	LOCAL_SRC_FILES := ../../../external/bootmenu/libreboot/reboot.c
 endif
 
-ifneq ($(BOARD_BOOTLOADER_BOARD_NAME),jordan)
+ifneq ($(TARGET_BOOTLOADER_BOARD_NAME),jordan)
 	LOCAL_CFLAGS += -DUNLOCKED_DEVICE
 endif
 
