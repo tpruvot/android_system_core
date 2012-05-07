@@ -106,6 +106,9 @@ bool NetlinkEvent::parseBinaryNetlinkMessage(char *buffer, int size) {
                     mAction = (ifi->ifi_flags & IFF_LOWER_UP) ?
                       NlActionLinkUp : NlActionLinkDown;
                     mSubsystem = strdup("net");
+                    SLOGV("RTM_NEWLINK message %s, action=%s (IFF flag=0x%x)",
+                         buffer, (mAction == NlActionLinkUp)?"up":"down",
+                         ifi->ifi_flags);
                     break;
                 }
 
@@ -127,8 +130,42 @@ bool NetlinkEvent::parseBinaryNetlinkMessage(char *buffer, int size) {
             mSubsystem = strdup("qlog");
             mAction = NlActionChange;
 
+        } else if (nh->nlmsg_type == RTM_DELLINK) {
+
+            int len = nh->nlmsg_len - sizeof(*nh);
+            struct ifinfomsg *ifi;
+
+            if (sizeof(*ifi) > (size_t) len) {
+                SLOGW("Got a short RTM_DELLINK message\n");
+                continue;
+            }
+
+            ifi = (ifinfomsg *)NLMSG_DATA(nh);
+            if ((ifi->ifi_flags & IFF_LOOPBACK) != 0) {
+                continue;
+            }
+
+            struct rtattr *rta = (struct rtattr *)
+              ((char *) ifi + NLMSG_ALIGN(sizeof(*ifi)));
+            len = NLMSG_PAYLOAD(nh, sizeof(*ifi));
+
+            while(RTA_OK(rta, len)) {
+                switch(rta->rta_type) {
+                case IFLA_IFNAME:
+                    char buffer[16 + IFNAMSIZ];
+                    snprintf(buffer, sizeof(buffer), "INTERFACE=%s",
+                             (char *) RTA_DATA(rta));
+                    mParams[0] = strdup(buffer);
+                    mAction = NlActionLinkDown;
+                    mSubsystem = strdup("net");
+                    SLOGV("RTM_DELLINK message %s, action=down\n", buffer);
+                    break;
+                }
+                rta = RTA_NEXT(rta, len);
+            }
+
         } else {
-                SLOGD("Unexpected netlink message. type=0x%x\n", nh->nlmsg_type);
+            SLOGD("Unexpected netlink message. type=%d.\n", nh->nlmsg_type);
         }
         nh = NLMSG_NEXT(nh, size);
     }
@@ -209,8 +246,10 @@ bool NetlinkEvent::parseAsciiNetlinkMessage(char *buffer, int size) {
 
 bool NetlinkEvent::decode(char *buffer, int size, int format) {
     if (format == NetlinkListener::NETLINK_FORMAT_BINARY) {
+        SLOGV("[binary event, size=%d]", size);
         return parseBinaryNetlinkMessage(buffer, size);
     } else {
+        SLOGV("%s", buffer);
         return parseAsciiNetlinkMessage(buffer, size);
     }
 }
