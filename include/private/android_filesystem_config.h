@@ -94,6 +94,13 @@
 #define AID_MOT_DLNA      9011  /* DLNA native */
 #endif // MOTOROLA_UIDS
 
+#if defined(MILESTONE_UIDS)
+#define AID_MOT_ACCY      9000  /* access to accessory */
+#define AID_MOT_PWRIC     9001  /* power IC */
+#define AID_MOT_USB       9002  /* mot usb */
+#define AID_MOT_TCMD      9003  /* mot_tcmd */
+#endif // MILESTONE_UIDS
+
 #define AID_MISC          9998  /* access to misc storage */
 #define AID_NOBODY        9999
 
@@ -165,6 +172,12 @@ static const struct android_id_info android_ids[] = {
     { "mot_caif",  AID_MOT_CAIF, },
     { "mot_dlna",  AID_MOT_DLNA, },
 #endif
+#if defined(MILESTONE_UIDS)
+    { "mot_accy",  AID_MOT_ACCY, },
+    { "mot_pwric", AID_MOT_PWRIC, },
+    { "mot_usb",   AID_MOT_USB, },
+    { "mot_tcmd",  AID_MOT_TCMD, },
+#endif
     { "misc",      AID_MISC, },
     { "nobody",    AID_NOBODY, },
 };
@@ -205,6 +218,7 @@ static struct fs_path_config android_dirs[] = {
     { 00755, AID_ROOT,   AID_SHELL,  "system/xbin" },
     { 00755, AID_ROOT,   AID_ROOT,   "system/etc/ppp" },
     { 00777, AID_ROOT,   AID_ROOT,   "sdcard" },
+    { 00770, AID_RADIO,  AID_LOG,    "data/logger" },
     { 00755, AID_ROOT,   AID_ROOT,   0 },
 };
 
@@ -236,6 +250,8 @@ static struct fs_path_config android_files[] = {
     { 00644, AID_MEDIA_RW,  AID_MEDIA_RW,  "data/media/*" },
     { 00644, AID_SYSTEM,    AID_SYSTEM,    "data/app-private/*" },
     { 00644, AID_APP,       AID_APP,       "data/data/*" },
+    { 00660, AID_RADIO,     AID_RADIO,     "data/logger/bplogd.clog" },
+    { 00660, AID_RADIO,     AID_RADIO,     "data/logger/bplogd.conf" },
         /* the following two files are INTENTIONALLY set-gid and not set-uid.
          * Do not change. */
     { 02755, AID_ROOT,      AID_NET_RAW,   "system/bin/ping" },
@@ -253,12 +269,14 @@ static struct fs_path_config android_files[] = {
     { 06750, AID_ROOT,      AID_SHELL,     "system/bin/run-as" },
     { 06750, AID_ROOT,      AID_SYSTEM,    "system/bin/rebootcmd" },
     { 00755, AID_ROOT,      AID_SHELL,     "system/bin/*" },
+    { 00555, AID_ROOT,      AID_ROOT,      "system/bin/brcm_guci_drv" },
     { 00755, AID_ROOT,      AID_ROOT,      "system/lib/valgrind/*" },
     { 00755, AID_ROOT,      AID_SHELL,     "system/xbin/*" },
     { 00755, AID_ROOT,      AID_SHELL,     "system/vendor/bin/*" },
     { 00750, AID_ROOT,      AID_SHELL,     "sbin/*" },
     { 00755, AID_ROOT,      AID_ROOT,      "bin/*" },
     { 00750, AID_ROOT,      AID_SHELL,     "init*" },
+    { 00750, AID_ROOT,      AID_SHELL,     "system/etc/init.d/*" },
     { 00750, AID_ROOT,      AID_SHELL,     "charger*" },
     { 00750, AID_ROOT,      AID_SHELL,     "sbin/fs_mgr" },
     { 00640, AID_ROOT,      AID_SHELL,     "fstab.*" },
