@@ -574,7 +574,7 @@ static void handle_block_device_event(struct uevent *uevent)
 static void handle_generic_device_event(struct uevent *uevent)
 {
     char *base;
-    const char *name;
+    const char *name = "";
     char devpath[96] = {0};
     char **links = NULL;
 
