@@ -71,6 +71,7 @@
 /dev/mtp_usb              0660   root       mtp
 /dev/usb_accessory        0660   root       usb
 /dev/tun                  0660   system     vpn
+/dev/assd                 0660   smartcard  smartcard
 
 # CDMA radio interface MUX
 /dev/ts0710mux*           0640   radio      radio

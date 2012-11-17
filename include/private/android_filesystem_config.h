@@ -61,6 +61,7 @@
 #define AID_UNUSED2       1025  /* deprecated, DO NOT USE */
 #define AID_DRMRPC        1026  /* group for drm rpc */
 #define AID_NFC           1027  /* nfc subsystem */
+#define AID_SMARTCARD     1028  /* smart card subsystem */
 
 #define AID_SHELL         2000  /* adb and debug shell user */
 #define AID_CACHE         2001  /* cache access */
@@ -134,6 +135,7 @@ static const struct android_id_info android_ids[] = {
     { "media_rw",  AID_MEDIA_RW, },
     { "vpn",       AID_VPN, },
     { "keystore",  AID_KEYSTORE, },
+    { "smartcard", AID_SMARTCARD, },
     { "usb",       AID_USB, },
     { "mtp",       AID_MTP, },
     { "gps",       AID_GPS, },
